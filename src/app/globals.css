@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --font-inter: "Inter", system-ui, sans-serif;
+  }
+  html { scroll-behavior: smooth; }
+  body { @apply antialiased text-gray-800; }
+  section[id] { scroll-margin-top: 72px; }
+}
+
+@layer components {
+  .container-brand {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+  .section-eyebrow {
+    @apply text-xs font-bold tracking-widest uppercase text-brand-teal mb-2;
+  }
+  .section-title {
+    @apply text-3xl sm:text-4xl font-black uppercase text-brand-navy leading-tight tracking-tight;
+  }
+  .section-title .accent {
+    @apply text-brand-teal;
+  }
+}
