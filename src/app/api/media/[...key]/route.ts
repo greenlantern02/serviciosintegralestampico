@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getR2Bucket } from "@/lib/r2";
 
-export const runtime = "edge";
-
 // Local dev only — serves R2 objects through Next.js so images load without a
 // public R2 domain. In production the frontend uses R2_PUBLIC_DOMAIN directly.
 export async function GET(

@@ -6,8 +6,6 @@ import { getSession } from "@/lib/session";
 import { media } from "@/db/schema";
 import type { MediaItem } from "@/types/cms";
 
-export const runtime = "edge";
-
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/svg+xml"];
 const MAX_SIZE = 10 * 1024 * 1024; // 10 MB
 

@@ -1,16 +1,21 @@
 {
   "name": "servicios-integrales",
-  "account_id": "822b9f8a79b35fd5e285074d081a4c3a",
   "compatibility_date": "2025-01-01",
   "compatibility_flags": ["nodejs_compat"],
-  "pages_build_output_dir": ".open-next/assets",
+  "main": ".open-next/worker.js",
+
+  // Static assets
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
 
   // D1 database
   "d1_databases": [
     {
       "binding": "DB",
       "database_name": "servicios-integrales",
-      "database_id": "99f48382-769b-47a3-8524-c16de75d2777",
+      "database_id": "9f7ac16b-7f94-417f-8615-e1d69439a0d3",
       "migrations_dir": "src/db/migrations"
     }
   ],
