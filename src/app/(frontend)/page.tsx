@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { getFeaturedProducts } from "@/actions/productos";
 import { ProductCard } from "@/components/catalog/ProductCard";
-import { SiLogo } from "@/components/brand/SiLogo";
+import Image from "next/image";
 import { GeoTR, GeoBL } from "@/components/brand/GeoTriangles";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
@@ -72,7 +72,7 @@ function Hero() {
             <div className="bg-white rounded-2xl shadow-2xl p-8 relative overflow-hidden">
               <GeoTR className="opacity-50" />
               <div className="flex items-center gap-3 mb-6">
-                <SiLogo size={44} />
+                <Image src="/logo.png" alt="Servicios Integrales logo" width={44} height={44} className="object-contain" />
                 <div>
                   <div className="font-black text-brand-teal text-base">Servicios Integrales</div>
                   <div className="text-xs text-gray-400">Perfil Corporativo</div>

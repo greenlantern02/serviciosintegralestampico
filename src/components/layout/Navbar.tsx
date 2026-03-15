@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { SiLogo } from "@/components/brand/SiLogo";
+import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
 import { Menu, X, Phone } from "lucide-react";
@@ -25,7 +25,7 @@ export function Navbar() {
         <div className="flex items-center justify-between h-16 md:h-[72px]">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3" onClick={() => setOpen(false)}>
-            <SiLogo size={38} />
+            <Image src="/logo.png" alt="Servicios Integrales logo" width={38} height={38} className="object-contain" />
             <span className="font-black text-lg text-brand-teal tracking-tight hidden sm:block">
               Servicios Integrales
             </span>

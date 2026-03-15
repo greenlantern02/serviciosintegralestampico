@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { SiLogo } from "@/components/brand/SiLogo";
+import Image from "next/image";
 import { Phone, Mail, Globe, MapPin } from "lucide-react";
 
 export function Footer() {
@@ -9,7 +9,7 @@ export function Footer() {
         <div className="flex flex-col md:flex-row justify-between items-start gap-8 pb-8 border-b border-white/10">
           {/* Brand */}
           <div className="flex items-center gap-3">
-            <SiLogo size={36} />
+            <Image src="/logo.png" alt="Servicios Integrales logo" width={36} height={36} className="object-contain" />
             <div>
               <div className="font-black text-brand-teal">Servicios Integrales</div>
               <div className="text-xs text-white/40 mt-0.5">Ciudad Madero, Tamaulipas · Cobertura Nacional</div>
