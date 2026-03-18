@@ -1,16 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getR2Bucket } from "@/lib/r2";
 
-// Local dev only — serves R2 objects through Next.js so images load without a
-// public R2 domain. In production the frontend uses R2_PUBLIC_DOMAIN directly.
+// Serves R2 objects through the Worker — works in both dev and production
+// since the R2 bucket has no public access configured.
 export async function GET(
   _req: NextRequest,
   { params }: { params: Promise<{ key: string[] }> }
 ): Promise<NextResponse> {
-  if (process.env.NODE_ENV !== "development") {
-    return new NextResponse("Not found", { status: 404 });
-  }
-
   const { key } = await params;
   const r2Key = key.join("/");
 

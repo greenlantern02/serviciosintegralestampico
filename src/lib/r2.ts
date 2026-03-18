@@ -6,13 +6,8 @@ export function getR2Bucket(): R2Bucket {
 }
 
 export function getR2PublicUrl(r2Key: string): string {
-  // In local dev, serve through the local proxy route instead of R2 public domain
-  if (process.env.NODE_ENV === "development") {
-    return `/api/media/${r2Key}`;
-  }
-  const domain = process.env.R2_PUBLIC_DOMAIN;
-  if (!domain) throw new Error("R2_PUBLIC_DOMAIN is not set");
-  return `https://${domain}/${r2Key}`;
+  // Serve through the Worker proxy — no public R2 domain required.
+  return `/api/media/${r2Key}`;
 }
 
 export async function uploadToR2(
