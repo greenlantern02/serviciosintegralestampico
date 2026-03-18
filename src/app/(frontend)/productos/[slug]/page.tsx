@@ -7,7 +7,7 @@ import { buildWhatsAppUrl } from "@/lib/whatsapp";
 import { WhatsAppButton } from "@/components/brand/WhatsAppButton";
 import { Badge } from "@/components/ui/badge";
 import { GeoTR } from "@/components/brand/GeoTriangles";
-import { ChevronLeft, Star, CheckCircle2 } from "lucide-react";
+import { ChevronLeft, Star } from "lucide-react";
 import type { Producto } from "@/types/cms";
 
 export const revalidate = 60;
@@ -145,8 +145,7 @@ export default async function ProductoDetallePage({ params }: Props) {
                         <div className="w-2/5 bg-brand-light-blue px-4 py-3 text-sm font-semibold text-brand-navy">
                           {spec.clave}
                         </div>
-                        <div className="flex-1 px-4 py-3 text-sm text-gray-700 flex items-center gap-2">
-                          <CheckCircle2 className="w-4 h-4 text-brand-teal flex-shrink-0" />
+                        <div className="flex-1 px-4 py-3 text-sm text-gray-700">
                           {spec.valor}
                         </div>
                       </div>
@@ -154,19 +153,43 @@ export default async function ProductoDetallePage({ params }: Props) {
                   </div>
                 </div>
               )}
+
+              {product.caracteristicas.length > 0 && (
+                <div>
+                  <h2 className="font-black text-brand-navy text-lg mb-3 uppercase tracking-wide text-sm">
+                    Características
+                  </h2>
+                  <ul className="space-y-1.5">
+                    {product.caracteristicas.map((c, i) => (
+                      <li key={i} className="flex items-start gap-2 text-sm text-gray-700">
+                        <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-teal flex-shrink-0" />
+                        {c.texto}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
           </div>
 
-          {product.descripcion && (
-            <div className="mt-16 max-w-3xl">
-              <h2 className="section-title mb-6">
-                Descripción <span className="text-brand-teal">completa</span>
-              </h2>
-              <div className="prose prose-gray max-w-none">
-                <RichTextRenderer content={product.descripcion} />
+          {product.descripcion && product.descripcion.trim() !== "" && (() => {
+            // Skip empty Lexical JSON shells with no text content
+            try {
+              const parsed = JSON.parse(product.descripcion!);
+              const text = JSON.stringify(parsed).replace(/"text":"(\s*)"/g, '');
+              if (!text.includes('"text"')) return null;
+            } catch { /* plain text — render it */ }
+            return (
+              <div className="mt-16 max-w-3xl">
+                <h2 className="section-title mb-6">
+                  Descripción <span className="text-brand-teal">completa</span>
+                </h2>
+                <div className="prose prose-gray max-w-none">
+                  <RichTextRenderer content={product.descripcion!} />
+                </div>
               </div>
-            </div>
-          )}
+            );
+          })()}
         </div>
       </section>
     </div>
