@@ -3,7 +3,7 @@
 import { eq, desc } from "drizzle-orm";
 import { getDb } from "@/lib/db";
 import { getSession } from "@/lib/session";
-import { productos, categorias, productoImagenes, especificaciones, precios } from "@/db/schema";
+import { productos, categorias, productoImagenes, media, especificaciones, caracteristicas, precios } from "@/db/schema";
 import { slugify } from "@/lib/slugify";
 import type { Producto, Categoria } from "@/types/cms";
 import type { AdminProductoForm } from "@/types/admin";
@@ -20,12 +20,17 @@ function rowToCategoria(row: typeof categorias.$inferSelect): Categoria {
 
 async function buildProducto(pRow: typeof productos.$inferSelect): Promise<Producto> {
   const db = getDb();
-  const [catRows, imgRows, specRows, precioRows] = await Promise.all([
+  const [catRows, imgRows, specRows, caracRows, precioRows] = await Promise.all([
     pRow.categoriaId
       ? db.select().from(categorias).where(eq(categorias.id, pRow.categoriaId)).limit(1)
       : Promise.resolve([]),
-    db.select().from(productoImagenes).where(eq(productoImagenes.productoId, pRow.id)).orderBy(productoImagenes.orden),
+    db.select({ pi: productoImagenes, m: media })
+      .from(productoImagenes)
+      .innerJoin(media, eq(productoImagenes.mediaId, media.id))
+      .where(eq(productoImagenes.productoId, pRow.id))
+      .orderBy(productoImagenes.orden),
     db.select().from(especificaciones).where(eq(especificaciones.productoId, pRow.id)).orderBy(especificaciones.orden),
+    db.select().from(caracteristicas).where(eq(caracteristicas.productoId, pRow.id)).orderBy(caracteristicas.orden),
     db.select().from(precios).where(eq(precios.productoId, pRow.id)).limit(1),
   ]);
 
@@ -37,12 +42,15 @@ async function buildProducto(pRow: typeof productos.$inferSelect): Promise<Produ
     descripcionCorta: pRow.descripcionCorta ?? null,
     descripcion: pRow.descripcion ?? null,
     imagenes: imgRows.map((r) => ({
-      id: r.id, productoId: r.productoId, mediaId: r.mediaId,
-      media: { id: r.mediaId, filename: "", url: "", r2Key: "", alt: "", mimeType: "", size: 0, width: null, height: null, createdAt: new Date() },
-      orden: r.orden,
+      id: r.pi.id, productoId: r.pi.productoId, mediaId: r.pi.mediaId,
+      media: { id: r.m.id, filename: r.m.filename, url: r.m.url, r2Key: r.m.r2Key, alt: r.m.alt, mimeType: r.m.mimeType, size: r.m.size, width: r.m.width ?? null, height: r.m.height ?? null, createdAt: r.m.createdAt ?? new Date() },
+      orden: r.pi.orden,
     })),
     especificaciones: specRows.map((r) => ({
       id: r.id, productoId: r.productoId, clave: r.clave, valor: r.valor, orden: r.orden,
+    })),
+    caracteristicas: caracRows.map((r) => ({
+      id: r.id, productoId: r.productoId, texto: r.texto, orden: r.orden,
     })),
     precio: precioRows[0]
       ? { id: precioRows[0].id, productoId: precioRows[0].productoId, precio: precioRows[0].precio, precioAnterior: precioRows[0].precioAnterior ?? null, stock: precioRows[0].stock, unidad: precioRows[0].unidad ?? null, updatedAt: precioRows[0].updatedAt ?? new Date() }
@@ -69,7 +77,7 @@ export async function listProductosAdmin(): Promise<Producto[]> {
     estado: r.p.estado, destacado: Boolean(r.p.destacado),
     descripcionCorta: r.p.descripcionCorta ?? null,
     descripcion: r.p.descripcion ?? null,
-    imagenes: [], especificaciones: [], precio: null,
+    imagenes: [], especificaciones: [], caracteristicas: [], precio: null,
     createdAt: r.p.createdAt ?? new Date(), updatedAt: r.p.updatedAt ?? new Date(),
   }));
 }
@@ -148,6 +156,16 @@ async function upsertRelations(productoId: string, form: AdminProductoForm, now:
       form.especificaciones.map((spec) => ({
         id: crypto.randomUUID(),
         productoId, clave: spec.clave, valor: spec.valor, orden: spec.orden,
+      }))
+    );
+  }
+
+  await db.delete(caracteristicas).where(eq(caracteristicas.productoId, productoId));
+  if (form.caracteristicas.length > 0) {
+    await db.insert(caracteristicas).values(
+      form.caracteristicas.map((c) => ({
+        id: crypto.randomUUID(),
+        productoId, texto: c.texto, orden: c.orden,
       }))
     );
   }
