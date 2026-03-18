@@ -1,7 +1,7 @@
 import { eq, and, desc, inArray } from "drizzle-orm";
 import { getDb } from "@/lib/db";
-import { productos, categorias, productoImagenes, media, especificaciones, precios } from "@/db/schema";
-import type { Producto, Categoria, ProductoImagen, Especificacion, MediaItem, Precio } from "@/types/cms";
+import { productos, categorias, productoImagenes, media, especificaciones, caracteristicas, precios } from "@/db/schema";
+import type { Producto, Categoria, ProductoImagen, Especificacion, Caracteristica, MediaItem, Precio } from "@/types/cms";
 
 // ─── Row mappers ─────────────────────────────────────────────────────────────
 
@@ -67,6 +67,17 @@ async function attachRelations(
     )
     .orderBy(especificaciones.orden);
 
+  // Fetch all caracteristicas
+  const caracRows = await db
+    .select()
+    .from(caracteristicas)
+    .where(
+      ids.length === 1
+        ? eq(caracteristicas.productoId, ids[0])
+        : inArray(caracteristicas.productoId, ids)
+    )
+    .orderBy(caracteristicas.orden);
+
   // Fetch precios
   const precioRows = await db
     .select()
@@ -99,6 +110,15 @@ async function attachRelations(
         orden: r.orden,
       }));
 
+    const caracteristicasData: Caracteristica[] = caracRows
+      .filter((r) => r.productoId === p.id)
+      .map((r) => ({
+        id: r.id,
+        productoId: r.productoId,
+        texto: r.texto,
+        orden: r.orden,
+      }));
+
     const precioRow = precioRows.find((r) => r.productoId === p.id);
     const precioData: Precio | null = precioRow
       ? {
@@ -124,6 +144,7 @@ async function attachRelations(
       descripcion: p.descripcion ?? null,
       imagenes,
       especificaciones: especificacionesData,
+      caracteristicas: caracteristicasData,
       precio: precioData,
       createdAt: p.createdAt ?? new Date(),
       updatedAt: p.updatedAt ?? new Date(),

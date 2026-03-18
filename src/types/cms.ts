@@ -42,6 +42,13 @@ export type Especificacion = {
   orden: number;
 };
 
+export type Caracteristica = {
+  id: string;
+  productoId: string;
+  texto: string;
+  orden: number;
+};
+
 export type Precio = {
   id: string;
   productoId: string;
@@ -64,6 +71,7 @@ export type Producto = {
   descripcion: string | null; // Lexical JSON string
   imagenes: ProductoImagen[];
   especificaciones: Especificacion[];
+  caracteristicas: Caracteristica[];
   precio: Precio | null;
   createdAt: Date;
   updatedAt: Date;

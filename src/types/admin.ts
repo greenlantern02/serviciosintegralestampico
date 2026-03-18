@@ -32,6 +32,7 @@ export type AdminProductoForm = {
   descripcion: string; // Lexical JSON string
   imagenes: Array<{ mediaId: string; orden: number }>;
   especificaciones: Array<{ clave: string; valor: string; orden: number }>;
+  caracteristicas: Array<{ texto: string; orden: number }>;
   precio: number;
   precioAnterior: number | null;
   stock: number;

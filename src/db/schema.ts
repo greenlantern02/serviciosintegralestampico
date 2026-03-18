@@ -62,6 +62,13 @@ export const especificaciones = sqliteTable("especificaciones", {
   orden: integer("orden").notNull().default(0),
 });
 
+export const caracteristicas = sqliteTable("caracteristicas", {
+  id: text("id").primaryKey(),
+  productoId: text("producto_id").notNull().references(() => productos.id, { onDelete: "cascade" }),
+  texto: text("texto").notNull(),
+  orden: integer("orden").notNull().default(0),
+});
+
 // Unused — kept for future pricing/inventory feature
 export const precios = sqliteTable("precios", {
   id: text("id").primaryKey(),
