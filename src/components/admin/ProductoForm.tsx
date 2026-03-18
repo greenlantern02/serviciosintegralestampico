@@ -7,6 +7,7 @@ import { createProducto, updateProducto } from "@/actions/admin/productos";
 import { RichTextEditor } from "@/components/admin/RichTextEditor";
 import { ImageUploader, type ImagenRow } from "@/components/admin/ImageUploader";
 import { EspecificacionesEditor, type EspecificacionRow } from "@/components/admin/EspecificacionesEditor";
+import { CaracteristicasEditor, type CaracteristicaRow } from "@/components/admin/CaracteristicasEditor";
 import type { Producto, Categoria, ProductoEstado } from "@/types/cms";
 
 interface ProductoFormProps {
@@ -29,6 +30,9 @@ export function ProductoForm({ producto, categorias }: ProductoFormProps) {
   const [especificaciones, setEspecificaciones] = useState<EspecificacionRow[]>(
     producto?.especificaciones.map((e) => ({ clave: e.clave, valor: e.valor })) ?? []
   );
+  const [caracRows, setCaracRows] = useState<CaracteristicaRow[]>(
+    producto?.caracteristicas.map((c) => ({ texto: c.texto })) ?? []
+  );
   const [precio, setPrecio] = useState(producto?.precio?.precio ?? 0);
   const [precioAnterior, setPrecioAnterior] = useState(producto?.precio?.precioAnterior ?? 0);
   const [stock, setStock] = useState(producto?.precio?.stock ?? 0);
@@ -44,6 +48,8 @@ export function ProductoForm({ producto, categorias }: ProductoFormProps) {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!nombre.trim()) { setError("El nombre es requerido."); return; }
+    const invalidSpec = especificaciones.find((s) => !s.clave.trim() || !s.valor.trim());
+    if (invalidSpec) { setError("Todas las especificaciones técnicas deben tener clave y valor."); return; }
     setSaving(true);
     setError("");
 
@@ -52,6 +58,7 @@ export function ProductoForm({ producto, categorias }: ProductoFormProps) {
       descripcionCorta, descripcion,
       imagenes: imagenes.map((img, i) => ({ mediaId: img.mediaId, orden: i })),
       especificaciones: especificaciones.map((s, i) => ({ ...s, orden: i })),
+      caracteristicas: caracRows.map((c, i) => ({ texto: c.texto, orden: i })),
       precio, precioAnterior: precioAnterior || null, stock, unidad,
     };
 
@@ -150,6 +157,12 @@ export function ProductoForm({ producto, categorias }: ProductoFormProps) {
       <section className="space-y-3">
         <h2 className="text-white/30 text-xs uppercase tracking-widest font-semibold">Especificaciones técnicas</h2>
         <EspecificacionesEditor value={especificaciones} onChange={setEspecificaciones} />
+      </section>
+
+      {/* Características */}
+      <section className="space-y-3">
+        <h2 className="text-white/30 text-xs uppercase tracking-widest font-semibold">Características</h2>
+        <CaracteristicasEditor value={caracRows} onChange={setCaracRows} />
       </section>
 
       {/* Descripción completa */}
