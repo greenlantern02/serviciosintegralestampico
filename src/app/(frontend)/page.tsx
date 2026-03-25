@@ -333,7 +333,7 @@ function Contact() {
           <div className="space-y-5">
             {[
               { Icon: Phone, label: "Teléfono", value: "+52 833 111 2410", href: "tel:+528331112410" },
-              { Icon: Mail, label: "Correo electrónico", value: "serviciosintegralesdetampico@gmail.com", href: "mailto:serviciosintegralesdetampico@gmail.com" },
+              { Icon: Mail, label: "Correo electrónico", value: "ventas@serviciosintegralesdetampico.com", href: "mailto:ventas@serviciosintegralesdetampico.com" },
               { Icon: Globe, label: "Catálogo digital", value: "bit.ly/servicios_integrales", href: "https://bit.ly/servicios_integrales" },
               { Icon: MapPin, label: "Ubicación", value: "Ciudad Madero, Tamaulipas", href: null },
             ].map(({ Icon, label, value, href }) => (

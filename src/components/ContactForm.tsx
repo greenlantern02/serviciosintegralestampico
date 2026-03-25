@@ -15,7 +15,7 @@ export function ContactForm() {
     const body = encodeURIComponent(
       `Nombre: ${nombre}\nEmpresa: ${empresa}\n\nMensaje:\n${mensaje}`
     );
-    window.location.href = `mailto:serviciosintegralesdetampico@gmail.com?subject=${subject}&body=${body}`;
+    window.location.href = `mailto:ventas@serviciosintegralesdetampico.com?subject=${subject}&body=${body}`;
   }
 
   return (

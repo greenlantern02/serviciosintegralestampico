@@ -29,8 +29,8 @@ export function Footer() {
             <a href="tel:+528331112410" className="flex items-center gap-2 hover:text-brand-teal transition-colors">
               <Phone className="w-4 h-4" /> +52 833 111 2410
             </a>
-            <a href="mailto:serviciosintegralesdetampico@gmail.com" className="flex items-center gap-2 hover:text-brand-teal transition-colors">
-              <Mail className="w-4 h-4" /> serviciosintegralesdetampico@gmail.com
+            <a href="mailto:ventas@serviciosintegralesdetampico.com" className="flex items-center gap-2 hover:text-brand-teal transition-colors">
+              <Mail className="w-4 h-4" /> ventas@serviciosintegralesdetampico.com
             </a>
             <a href="https://bit.ly/servicios_integrales" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-brand-teal transition-colors">
               <Globe className="w-4 h-4" /> Catálogo digital
