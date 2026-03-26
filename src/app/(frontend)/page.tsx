@@ -333,7 +333,6 @@ function Contact() {
           <div className="space-y-5">
             {[
               { Icon: Phone, label: "Teléfono", value: "+52 833 111 2410", href: "tel:+528331112410" },
-              { Icon: Mail, label: "Correo electrónico", value: "ventas@serviciosintegralesdetampico.com", href: "mailto:ventas@serviciosintegralesdetampico.com" },
               { Icon: Globe, label: "Catálogo digital", value: "bit.ly/servicios_integrales", href: "https://bit.ly/servicios_integrales" },
               { Icon: MapPin, label: "Ubicación", value: "Ciudad Madero, Tamaulipas", href: null },
             ].map(({ Icon, label, value, href }) => (
@@ -354,6 +353,25 @@ function Contact() {
                 </div>
               </div>
             ))}
+
+            {/* Email — single icon/label, two mailto links */}
+            <div className="flex items-start gap-4">
+              <div className="w-12 h-12 bg-brand-light-blue rounded-xl flex items-center justify-center flex-shrink-0">
+                <Mail className="w-5 h-5 text-brand-teal" />
+              </div>
+              <div>
+                <div className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-1">Correo electrónico</div>
+                <a href="mailto:ventas@serviciosintegralesdetampico.com"
+                  className="font-semibold text-brand-navy hover:text-brand-teal transition-colors break-all text-sm block">
+                  ventas@serviciosintegralesdetampico.com
+                </a>
+                <a href="mailto:dir@serviciosintegralesdetampico.com"
+                  className="font-semibold text-brand-navy hover:text-brand-teal transition-colors break-all text-sm block">
+                  dir@serviciosintegralesdetampico.com
+                </a>
+              </div>
+            </div>
+
             <a href="tel:+528331112410" className={cn(buttonVariants({ size: "lg" }), "mt-4 inline-flex")}>
               <Phone className="w-5 h-5" /> Llamar ahora
             </a>
